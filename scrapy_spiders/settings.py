@@ -13,7 +13,7 @@ LOG_LEVEL = 'DEBUG'
 
 BOT_NAME = 'scrapy_spiders'
 
-SPIDER_MODULES = ['scrapy_spiders.spiders', 'scrapy_spiders.spiders.common']
+SPIDER_MODULES = ['scrapy_spiders.spiders']
 NEWSPIDER_MODULE = 'scrapy_spiders.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -73,6 +73,9 @@ ITEM_PIPELINES = {
 MONGO_URI = '192.168.2.223'
 MONGO_DB = 'scrapy'
 
+
+
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 # AUTOTHROTTLE_ENABLED = True
@@ -93,3 +96,22 @@ MONGO_DB = 'scrapy'
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+IMAGES_STORE = 'F:\\图片\\flickr'
+
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+
+FLICKR_API_KEY = '4787c248acb64c1c64ce74e142a4f9be'
+
+REDIS_HOST = '192.168.2.106'
+
+REDIS_PORT = 6379
+
+# 去重队列是否持久化
+SCHEDULER_PERSIST = True
+
+
+

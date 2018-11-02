@@ -18,6 +18,8 @@ from scrapy.utils.project import get_project_settings
 
 from scrapy_spiders.spiders.common.configs.utils import get_config
 
+from scrapy.cmdline import execute
+
 
 def run():
     name = 'china'
@@ -32,4 +34,6 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    # run()
+
+    execute(["scrapy", "crawl", "flickr"])

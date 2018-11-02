@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-import os
 
-from os.path import dirname, realpath
 from scrapy.spiders import CrawlSpider
-# from scrapyuniversal.utils import get_config
-from scrapy_spiders.items import ChinaItem
-from scrapy_spiders.spiders.common import urls
-from scrapy_spiders.spiders.common.configs.item_loader import ChinaLoader
 
 from scrapy_spiders.spiders.common.configs.rules import rules
 from scrapy_spiders.spiders.common.configs.utils import get_config
+
+
+# from scrapyuniversal.utils import get_config
 
 
 class UniversalSpider(CrawlSpider):

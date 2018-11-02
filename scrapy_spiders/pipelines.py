@@ -5,6 +5,9 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
+from scrapy import Request
+from scrapy.exceptions import DropItem
+from scrapy.pipelines.images import ImagesPipeline
 
 
 class ScrapySpidersPipeline(object):
@@ -34,3 +37,60 @@ class MongoPipeline(object):
 
     def close_spier(self, spider):
         self.client.close()
+
+
+
+from scrapy_redis import get_redis_from_settings
+
+
+class AiscrapyPipeline(object):
+    def process_item(self, item, spider):
+        return item
+
+
+class ImagePipeline(ImagesPipeline):
+
+    def __init__(self, *args, **kwargs):
+        super(ImagePipeline, self).__init__(*args, **kwargs)
+
+        settings = kwargs.get('settings')
+        self.server = get_redis_from_settings(settings)
+        self.key = 'image_dupefilter'
+
+    # @classmethod
+    # def from_settings(cls, settings):
+    #     print('asdf')
+
+    # def file_path(self, request, response=None, info=None):
+    #     """
+    #     返回文件名
+    #     :param request:
+    #     :param response:
+    #     :param info:
+    #     :return:
+    #     """
+    #
+    #     # print(info.get('downloaded'))
+    #     path = super(ImagePipeline, self).file_path(request, response=None,
+    #                                                 info=None)
+    #
+    #     path = path.replace('full/', '')
+    #
+    #     return path
+
+    def item_completed(self, results, item, info):
+        image_paths = [x['path'] for ok, x in results if ok]
+
+        if not image_paths:
+            raise DropItem('Image Downloaded Failed')
+
+        return item
+
+    def get_media_requests(self, item, info):
+
+        if self.dupefilter(item, info):
+            yield Request(item['url'])
+
+    def dupefilter(self, item, info):
+        added = self.server.sadd(self.key, item['url'])
+        return True

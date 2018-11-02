@@ -7,7 +7,6 @@ from scrapy.utils.request import request_fingerprint
 from . import defaults
 from .connection import get_redis_from_settings
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -83,21 +82,24 @@ class RFPDupeFilter(BaseDupeFilter):
         """
         return cls.from_settings(crawler.settings)
 
-    def request_seen(self, request):
+    def request_seen(self, request, key=None):
         """Returns True if request was already seen.
 
         Parameters
         ----------
         request : scrapy.http.Request
+        key : redis key
 
         Returns
         -------
         bool
 
         """
+        if not key:
+            key = self.key
         fp = self.request_fingerprint(request)
         # This returns the number of values added, zero if already exists.
-        added = self.server.sadd(self.key, fp)
+        added = self.server.sadd(key, fp)
         return added == 0
 
     def request_fingerprint(self, request):
@@ -118,7 +120,8 @@ class RFPDupeFilter(BaseDupeFilter):
     def from_spider(cls, spider):
         settings = spider.settings
         server = get_redis_from_settings(settings)
-        dupefilter_key = settings.get("SCHEDULER_DUPEFILTER_KEY", defaults.SCHEDULER_DUPEFILTER_KEY)
+        dupefilter_key = settings.get("SCHEDULER_DUPEFILTER_KEY",
+                                      defaults.SCHEDULER_DUPEFILTER_KEY)
         key = dupefilter_key % {'spider': spider.name}
         debug = settings.getbool('DUPEFILTER_DEBUG')
         return cls(server, key=key, debug=debug)
@@ -148,10 +151,12 @@ class RFPDupeFilter(BaseDupeFilter):
         """
         if self.debug:
             msg = "Filtered duplicate request: %(request)s"
-            self.logger.debug(msg, {'request': request}, extra={'spider': spider})
+            self.logger.debug(msg, {'request': request},
+                              extra={'spider': spider})
         elif self.logdupes:
             msg = ("Filtered duplicate request %(request)s"
                    " - no more duplicates will be shown"
                    " (see DUPEFILTER_DEBUG to show all duplicates)")
-            self.logger.debug(msg, {'request': request}, extra={'spider': spider})
+            self.logger.debug(msg, {'request': request},
+                              extra={'spider': spider})
             self.logdupes = False

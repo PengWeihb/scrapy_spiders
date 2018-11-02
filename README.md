@@ -26,8 +26,8 @@ re_first((.*)name)
 
 Downloader Middleware
 process_request(request, spider)
-None：继续调用低优先级对的中间级
-request：低优先级的中间件不会再被调用，这个request被放回调度队列，等待重新调用
+None：    继续调用低优先级对的中间级
+request： 低优先级的中间件不会再被调用，这个request被放回调度队列，等待重新调用
 response：低优先级的中间件不会被调用，转而依次调用process_response
 
 process_response(request, response, spider)

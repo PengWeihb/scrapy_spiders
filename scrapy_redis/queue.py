@@ -29,8 +29,9 @@ class Base(object):
             raise TypeError("serializer does not implement 'loads' function: %r"
                             % serializer)
         if not hasattr(serializer, 'dumps'):
-            raise TypeError("serializer '%s' does not implement 'dumps' function: %r"
-                            % serializer)
+            raise TypeError(
+                "serializer '%s' does not implement 'dumps' function: %r"
+                % serializer)
 
         self.server = server
         self.spider = spider
@@ -51,7 +52,7 @@ class Base(object):
         """Return the length of the queue"""
         raise NotImplementedError
 
-    def push(self, request):
+    def push(self, request, key=None):
         """Push a request"""
         raise NotImplementedError
 
@@ -71,9 +72,11 @@ class FifoQueue(Base):
         """Return the length of the queue"""
         return self.server.llen(self.key)
 
-    def push(self, request):
+    def push(self, request, key=None):
         """Push a request"""
-        self.server.lpush(self.key, self._encode_request(request))
+        if not key:
+            key = self.key
+        self.server.lpush(key, self._encode_request(request))
 
     def pop(self, timeout=0):
         """Pop a request"""
@@ -94,14 +97,19 @@ class PriorityQueue(Base):
         """Return the length of the queue"""
         return self.server.zcard(self.key)
 
-    def push(self, request):
+    def push(self, request, key=None):
         """Push a request"""
+
+        if not key:
+            key = self.key
+
         data = self._encode_request(request)
         score = -request.priority
+
         # We don't use zadd method as the order of arguments change depending on
         # whether the class is Redis or StrictRedis, and the option of using
         # kwargs only accepts strings, not bytes.
-        self.server.execute_command('ZADD', self.key, score, data)
+        self.server.execute_command('ZADD', key, score, data)
 
     def pop(self, timeout=0):
         """
@@ -124,9 +132,11 @@ class LifoQueue(Base):
         """Return the length of the stack"""
         return self.server.llen(self.key)
 
-    def push(self, request):
+    def push(self, request, key=None):
         """Push a request"""
-        self.server.lpush(self.key, self._encode_request(request))
+        if not key:
+            key = self.key
+        self.server.lpush(key, self._encode_request(request))
 
     def pop(self, timeout=0):
         """Pop a request"""
@@ -138,7 +148,7 @@ class LifoQueue(Base):
             data = self.server.lpop(self.key)
 
         if data:
-            return self._decode_request(data)
+            return self._ecode_request(data)
 
 
 # TODO: Deprecate the use of these names.

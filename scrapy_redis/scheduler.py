@@ -140,7 +140,8 @@ class Scheduler(object):
             self.flush()
         # notice if there are requests already in the queue to resume the crawl
         if len(self.queue):
-            spider.log("Resuming crawl (%d requests scheduled)" % len(self.queue))
+            spider.log(
+                "Resuming crawl (%d requests scheduled)" % len(self.queue))
 
     def close(self, reason):
         if not self.persist:
@@ -151,12 +152,26 @@ class Scheduler(object):
         self.queue.clear()
 
     def enqueue_request(self, request):
-        if not request.dont_filter and self.df.request_seen(request):
+        # 入队操作，如果request中的meta中有spider_name判断需要写入的redis key
+        # 包括requests和dupefilter
+        key = None
+        spider_name = request.meta.get('spider_name')
+        if spider_name:
+            key = self.dupefilter_key.format(spider=spider_name)
+
+        if not request.dont_filter and self.df.request_seen(request, key):
             self.df.log(request, self.spider)
             return False
+
         if self.stats:
             self.stats.inc_value('scheduler/enqueued/redis', spider=self.spider)
-        self.queue.push(request)
+
+        key = None
+
+        if spider_name:
+            key = self.queue_key.format(spider=spider_name)
+
+        self.queue.push(request, key)
         return True
 
     def next_request(self):
@@ -168,3 +183,8 @@ class Scheduler(object):
 
     def has_pending_requests(self):
         return len(self) > 0
+
+
+
+
+
