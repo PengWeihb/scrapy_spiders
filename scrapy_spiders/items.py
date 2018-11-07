@@ -61,8 +61,7 @@ class ImgItem(scrapy.Item):
     url = Field()
     site = Field()
     text = Field()
+    _id = Field()
 
 
-class FlickrItem(scrapy.Item):
-    url = Field()
-    site = Field()
+

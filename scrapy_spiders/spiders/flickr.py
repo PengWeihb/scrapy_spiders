@@ -63,7 +63,7 @@ class FlickrSpider(RedisSpider):
             if not item['url']:
                 item['url'] = photo.xpath('./@url_l').extract_first()
             item['site'] = 'flickr'
-
+            item['_id'] = photo.xpath('./@id').extract_first()
             if not item['url']:
                 continue
 
@@ -76,12 +76,15 @@ class FlickrSpider(RedisSpider):
         print('page = ', page, pages)
 
 
-        # if page == 1:
-        #     for i in range(2, pages):
-        #         yield self.create_request(
-        #             **{'dont_filter': True,
-        #                'meta': {'page': i, 'text': 'knife'}})
+        if page == 1:
+            for i in range(2, 10):
+                yield self.create_request(
+                    **{'dont_filter': True,
+                       'meta': {'page': i, 'text': 'knife'}})
 
 
     # def parse_two(self):
     #     print('*************')
+
+
+

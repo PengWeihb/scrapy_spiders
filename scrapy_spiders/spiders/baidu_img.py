@@ -9,7 +9,7 @@ from scrapy.utils.project import get_project_settings
 from scrapy_redis.dupefilter import RFPDupeFilter
 from scrapy_redis.spiders import RedisSpider
 
-# from AiScrapy.items import FlickrItem, ImgItem
+
 from scrapy_common.exceptions import ParamsError, FieldError
 from scrapy_spiders.items import ImgItem
 

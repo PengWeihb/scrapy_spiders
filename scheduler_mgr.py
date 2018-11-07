@@ -10,6 +10,13 @@ def baidu_img_schedule(page=100):
 
 
 def flickr_img_schedule():
+    """
+    fruit knife
+    knife
+    刀
+    knives
+    :return:
+    """
     scheduler_instance.scheduler_request('flickr',
                                          **{'dont_filter': True,
                                             'meta': {'page': 1,
@@ -17,7 +24,6 @@ def flickr_img_schedule():
 
 
 if __name__ == '__main__':
-
     # baidu_img_schedule(100)
 
     flickr_img_schedule()

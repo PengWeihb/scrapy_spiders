@@ -36,4 +36,4 @@ def run():
 if __name__ == '__main__':
     # run()
 
-    execute(["scrapy", "crawl", "flickr"])
+    execute(["scrapy", "crawl", "flickr_chrome"])

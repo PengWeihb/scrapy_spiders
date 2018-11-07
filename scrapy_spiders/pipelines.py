@@ -9,6 +9,8 @@ from scrapy import Request
 from scrapy.exceptions import DropItem
 from scrapy.pipelines.images import ImagesPipeline
 
+from scrapy_redis import get_redis_from_settings
+
 
 class ScrapySpidersPipeline(object):
 
@@ -39,16 +41,13 @@ class MongoPipeline(object):
         self.client.close()
 
 
-
-from scrapy_redis import get_redis_from_settings
-
-
 class AiscrapyPipeline(object):
     def process_item(self, item, spider):
         return item
 
 
 class ImagePipeline(ImagesPipeline):
+    redis_key = 'image:'
 
     def __init__(self, *args, **kwargs):
         super(ImagePipeline, self).__init__(*args, **kwargs)
@@ -92,5 +91,6 @@ class ImagePipeline(ImagesPipeline):
             yield Request(item['url'])
 
     def dupefilter(self, item, info):
-        added = self.server.sadd(self.key, item['url'])
-        return True
+        added = self.server.sadd(self.redis_key + item['site'] + '_dupefilter',
+                                 item['_id'])
+        return added

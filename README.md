@@ -45,6 +45,12 @@ Spider Middleware
 
 
 
+
+Response
+.body 获取bytes的返回内容
+.text 获取返回的字符串
+
+
 通过SchedulerMgr进行调度的request只能使用默认的回调
 
 
