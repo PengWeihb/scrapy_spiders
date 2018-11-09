@@ -36,4 +36,6 @@ def run():
 if __name__ == '__main__':
     # run()
 
-    execute(["scrapy", "crawl", "flickr_chrome"])
+    execute(["scrapy", "crawl", "flickr", "-a", "close='a'"])
+
+    # execute(["scrapy", "crawl", "flickr_chrome"])

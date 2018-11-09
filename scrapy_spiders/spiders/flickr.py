@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from scrapy import Request
+from scrapy import Request, Spider
+from scrapy.exceptions import CloseSpider
 from scrapy.utils.project import get_project_settings
-
 
 from scrapy_common.exceptions import FieldError
 # import scrapy_redis.dupefilter.RFPDupeFilter
@@ -13,18 +13,21 @@ from scrapy_spiders.items import ImgItem
 logger = logging.getLogger(__name__)
 
 
+
 class FlickrSpider(RedisSpider):
-    # class FlickrSpider(scrapy.Spider):
+# class FlickrSpider(Spider):
     #     RFPDupeFilter
 
     name = 'flickr'
-    allowed_domains = ['quotes.toscrape.com']
+    # allowed_domains = ['quotes.toscrape.com']
 
     api = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key={flickr_api_key}&text={text}&page={page}&sort=relevance&extras=url_o,url_l'
 
     ima_url = 'https://farm{farm_id}.staticflickr.com/{server_id}/{id}_{secret}_m.jpg'
 
     def __init__(self, *args, **kwargs):
+        # super(FlickrSpider, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         settings = get_project_settings()
         self.flickr_api_key = settings.get('FLICKR_API_KEY', None)
         if not self.flickr_api_key:
@@ -35,7 +38,17 @@ class FlickrSpider(RedisSpider):
         self.start_urls = [
             self.api.format(page=self.page, flickr_api_key=self.flickr_api_key,
                             text=self.text)]
-        super().__init__(*args, **kwargs)
+
+        # if kwargs.get('close'):
+        # raise CloseSpider
+
+
+    # @classmethod
+    # def from_crawler(cls, crawler, *args, **kwargs):
+    #     obj = super().from_crawler(crawler, *args, kwargs)
+    #     return obj
+
+
 
     @classmethod
     def create_request(cls, *args, **kwargs):
@@ -72,9 +85,7 @@ class FlickrSpider(RedisSpider):
         page = int(response.xpath('//photos/@page').extract_first())
         pages = int(response.xpath('//photos/@pages').extract_first())
 
-
         print('page = ', page, pages)
-
 
         if page == 1:
             for i in range(2, 10):
@@ -82,9 +93,5 @@ class FlickrSpider(RedisSpider):
                     **{'dont_filter': True,
                        'meta': {'page': i, 'text': 'knife'}})
 
-
     # def parse_two(self):
     #     print('*************')
-
-
-
