@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from scrapy import Request, Spider
-from scrapy.exceptions import CloseSpider
+from scrapy import Request
 from scrapy.utils.project import get_project_settings
 
 from scrapy_common.exceptions import FieldError
@@ -13,9 +12,8 @@ from scrapy_spiders.items import ImgItem
 logger = logging.getLogger(__name__)
 
 
-
 class FlickrSpider(RedisSpider):
-# class FlickrSpider(Spider):
+    # class FlickrSpider(Spider):
     #     RFPDupeFilter
 
     name = 'flickr'
@@ -26,8 +24,8 @@ class FlickrSpider(RedisSpider):
     ima_url = 'https://farm{farm_id}.staticflickr.com/{server_id}/{id}_{secret}_m.jpg'
 
     def __init__(self, *args, **kwargs):
-        # super(FlickrSpider, self).__init__(*args, **kwargs)
-        super().__init__(*args, **kwargs)
+        super(FlickrSpider, self).__init__(*args, **kwargs)
+        print(kwargs)
         settings = get_project_settings()
         self.flickr_api_key = settings.get('FLICKR_API_KEY', None)
         if not self.flickr_api_key:
@@ -38,17 +36,6 @@ class FlickrSpider(RedisSpider):
         self.start_urls = [
             self.api.format(page=self.page, flickr_api_key=self.flickr_api_key,
                             text=self.text)]
-
-        # if kwargs.get('close'):
-        # raise CloseSpider
-
-
-    # @classmethod
-    # def from_crawler(cls, crawler, *args, **kwargs):
-    #     obj = super().from_crawler(crawler, *args, kwargs)
-    #     return obj
-
-
 
     @classmethod
     def create_request(cls, *args, **kwargs):
@@ -64,6 +51,7 @@ class FlickrSpider(RedisSpider):
 
     def parse(self, response):
         meta = response.meta
+        text = meta.get('text')
         print('爬取成功', meta)
         print(type(response.body))
         # json_content = json.loads(response.body.decode())
@@ -88,10 +76,10 @@ class FlickrSpider(RedisSpider):
         print('page = ', page, pages)
 
         if page == 1:
-            for i in range(2, 10):
+            for i in range(2, pages):
                 yield self.create_request(
                     **{'dont_filter': True,
-                       'meta': {'page': i, 'text': 'knife'}})
+                       'meta': {'page': i, 'text': text}})
 
     # def parse_two(self):
     #     print('*************')

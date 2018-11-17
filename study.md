@@ -39,19 +39,36 @@ process_exception(request, exception, spider)
 Spider Middleware
 
 
-
-
-
-
-
-
-
 Response
 .body 获取bytes的返回内容
 .text 获取返回的字符串
 
 
+
 通过SchedulerMgr进行调度的request只能使用默认的回调
+
+
+
+scrapyd-client的使用：
+在scrapy.cfg中写入如下配置
+[deploy]
+url = http://localhost:6800/
+project = scrapy_spiders
+或者
+[deploy:nb]
+url = http://localhost:6800/
+project = scrapy_spiders
+(username=***)
+(password=***)
+然后使用scrapyd-deploy 或者指定部署到哪个scrapy-deploy nb
+当使用scrapyd-deploy -v v2 指定版本号的时候，会报错
+
+
+
+
+
+
+
 
 
 

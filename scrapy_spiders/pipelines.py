@@ -60,22 +60,22 @@ class ImagePipeline(ImagesPipeline):
     # def from_settings(cls, settings):
     #     print('asdf')
 
-    # def file_path(self, request, response=None, info=None):
-    #     """
-    #     返回文件名
-    #     :param request:
-    #     :param response:
-    #     :param info:
-    #     :return:
-    #     """
-    #
-    #     # print(info.get('downloaded'))
-    #     path = super(ImagePipeline, self).file_path(request, response=None,
-    #                                                 info=None)
-    #
-    #     path = path.replace('full/', '')
-    #
-    #     return path
+    def file_path(self, request, response=None, info=None):
+        """
+        返回文件名
+        :param request:
+        :param response:
+        :param info:
+        :return:
+        """
+
+        # print(info.get('downloaded'))
+        path = super(ImagePipeline, self).file_path(request, response=None,
+                                                    info=None)
+
+        path = path.replace('full/', '')
+
+        return path
 
     def item_completed(self, results, item, info):
         image_paths = [x['path'] for ok, x in results if ok]
