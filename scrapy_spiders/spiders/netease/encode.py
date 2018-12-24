@@ -16,12 +16,12 @@ def aa(a):
     return c
 
 
-def bb(a, b):
-    c = CryptoJS.enc.Utf8.parse(b)
-    d = CryptoJS.enc.Utf8.parse("0102030405060708")
-    e = CryptoJS.enc.Utf8.parse(a)
-    f = CryptoJS.AES.encrypt(e, c, {iv: d,mode: CryptoJS.mode.CBC});
-    return f.toString()
+# def bb(a, b):
+#     c = CryptoJS.enc.Utf8.parse(b)
+#     d = CryptoJS.enc.Utf8.parse("0102030405060708")
+#     e = CryptoJS.enc.Utf8.parse(a)
+#     f = CryptoJS.AES.encrypt(e, c, {iv: d,mode: CryptoJS.mode.CBC});
+#     return f.toString()
 
 if __name__ == '__main__':
     print(aa(16))
