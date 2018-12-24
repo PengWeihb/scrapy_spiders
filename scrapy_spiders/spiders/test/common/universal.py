@@ -2,8 +2,8 @@
 
 from scrapy.spiders import CrawlSpider
 
-from scrapy_spiders.spiders.common.configs.rules import rules
-from scrapy_spiders.spiders.common.configs.utils import get_config
+from scrapy_spiders.spiders.test.common.configs import rules
+from scrapy_spiders.spiders.test.common.configs import get_config
 
 
 # from scrapyuniversal.utils import get_config

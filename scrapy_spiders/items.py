@@ -65,3 +65,6 @@ class ImgItem(scrapy.Item):
 
 
 
+
+
+

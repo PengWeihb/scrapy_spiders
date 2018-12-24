@@ -16,7 +16,7 @@
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
-from scrapy_spiders.spiders.common.configs.utils import get_config
+from scrapy_spiders.spiders.test.common.configs import get_config
 
 from scrapy.cmdline import execute
 
@@ -37,6 +37,9 @@ if __name__ == '__main__':
     # run()
 
     # execute(["scrapy", "crawl", "flickr",])
-    execute(["scrapy", "crawl", "flickr", "-a", "s=True"])
+    # execute(["scrapy", "crawl", "flickr", "-a", "s=True"])
+
+
+    execute(["scrapy", "crawl", "pizzahut"])
 
     # execute(["scrapy", "crawl", "flickr_chrome"])

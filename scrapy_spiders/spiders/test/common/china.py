@@ -3,7 +3,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
 from scrapy_spiders.items import ChinaItem
-from scrapy_spiders.spiders.common.configs.item_loader import ChinaLoader
+from scrapy_spiders.spiders.test.common.configs import ChinaLoader
 
 
 class ChinaSpider(CrawlSpider):

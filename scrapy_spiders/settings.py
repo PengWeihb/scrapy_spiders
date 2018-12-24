@@ -13,14 +13,15 @@ LOG_LEVEL = 'DEBUG'
 
 BOT_NAME = 'scrapy_spiders'
 
-SPIDER_MODULES = ['scrapy_spiders.spiders']
+SPIDER_MODULES = ['scrapy_spiders.spiders.pizzahut']
 NEWSPIDER_MODULE = 'scrapy_spiders.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'scrapy_spiders (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
@@ -65,16 +66,14 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+
 ITEM_PIPELINES = {
     'scrapy_spiders.pipelines.ScrapySpidersPipeline': 300,
-    'scrapy_spiders.pipelines.MongoPipeline': 400,
+    # 'scrapy_spiders.pipelines.MongoPipeline': 400,
 }
 
 MONGO_URI = '192.168.2.223'
 MONGO_DB = 'scrapy'
-
-
-
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -100,9 +99,11 @@ MONGO_DB = 'scrapy'
 
 IMAGES_STORE = 'F:\\图片\\flickr'
 
-SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 
-DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+
+# DUPEFILTER_CLASS = "scrapy.dupefilters.RFPDupeFilter"
 
 FLICKR_API_KEY = '4787c248acb64c1c64ce74e142a4f9be'
 
@@ -112,8 +113,3 @@ REDIS_PORT = 6379
 
 # 去重队列是否持久化
 SCHEDULER_PERSIST = True
-
-
-
-
-
